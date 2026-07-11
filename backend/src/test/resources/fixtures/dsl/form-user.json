@@ -1,0 +1,48 @@
+{
+  "version": "1",
+  "pageType": "form",
+  "style": "element-plus",
+  "title": "用户表单",
+  "children": [
+    {
+      "id": "PageHeader_b2c3d4e5",
+      "type": "PageHeader",
+      "props": {
+        "title": "用户表单"
+      }
+    },
+    {
+      "id": "FormSection_c3d4e5f6",
+      "type": "FormSection",
+      "props": {
+        "columns": 1,
+        "fields": [
+          {
+            "id": "f_name",
+            "name": "name",
+            "label": "姓名",
+            "control": "input",
+            "required": true
+          },
+          {
+            "id": "f_email",
+            "name": "email",
+            "label": "邮箱",
+            "control": "input",
+            "required": true
+          }
+        ]
+      }
+    },
+    {
+      "id": "ActionBar_d4e5f6g7",
+      "type": "ActionBar",
+      "props": {
+        "actions": [
+          { "id": "act_submit", "label": "提交", "type": "primary" },
+          { "id": "act_cancel", "label": "取消", "type": "default" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "version": "1",
+  "pageType": "list",
+  "style": "element-plus",
+  "title": "用户管理",
+  "children": [
+    {
+      "id": "PageHeader_a1b2c3d4",
+      "type": "PageHeader",
+      "props": {
+        "title": "用户管理",
+        "actions": [{ "id": "act_new", "label": "新建用户", "type": "primary" }]
+      }
+    },
+    {
+      "id": "SearchBar_e5f6g7h8",
+      "type": "SearchBar",
+      "props": {
+        "fields": [
+          { "id": "f_kw", "name": "keyword", "label": "关键词", "control": "input" },
+          {
+            "id": "f_st",
+            "name": "status",
+            "label": "状态",
+            "control": "select",
+            "options": ["启用", "禁用"]
+          }
+        ]
+      }
+    },
+    {
+      "id": "DataTable_i9j0k1l2",
+      "type": "DataTable",
+      "props": {
+        "columns": [
+          { "id": "c_name", "prop": "name", "label": "姓名" },
+          { "id": "c_email", "prop": "email", "label": "邮箱" },
+          { "id": "c_status", "prop": "status", "label": "状态" }
+        ],
+        "rowActions": [
+          { "id": "ra_edit", "label": "编辑" },
+          { "id": "ra_del", "label": "删除" }
+        ],
+        "dataSource": "mock"
+      }
+    },
+    {
+      "id": "Pagination_m3n4o5p6",
+      "type": "Pagination",
+      "props": { "pageSize": 10 }
+    }
+  ]
+}

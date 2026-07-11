@@ -1,0 +1,47 @@
+{
+  "version": "1",
+  "pageType": "dashboard",
+  "style": "element-plus",
+  "title": "数据概览",
+  "children": [
+    {
+      "id": "PageHeader_e5f6g7h8",
+      "type": "PageHeader",
+      "props": {
+        "title": "数据概览"
+      }
+    },
+    {
+      "id": "StatCards_f6g7h8i9",
+      "type": "StatCards",
+      "props": {
+        "items": [
+          { "id": "st_users", "label": "用户数", "value": "1280", "unit": "人" },
+          { "id": "st_orders", "label": "今日订单", "value": "56" },
+          { "id": "st_rate", "label": "转化率", "value": "3.2", "unit": "%" }
+        ]
+      }
+    },
+    {
+      "id": "Container_g7h8i9j0",
+      "type": "Container",
+      "props": {
+        "layout": "stack"
+      },
+      "children": [
+        {
+          "id": "DataTable_h8i9j0k1",
+          "type": "DataTable",
+          "props": {
+            "columns": [
+              { "id": "c_name", "prop": "name", "label": "名称" },
+              { "id": "c_count", "prop": "count", "label": "数量" },
+              { "id": "c_updated", "prop": "updatedAt", "label": "更新时间" }
+            ],
+            "dataSource": "mock"
+          }
+        }
+      ]
+    }
+  ]
+}

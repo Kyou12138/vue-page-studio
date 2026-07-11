@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vue-page-studio.local/schemas/page-dsl.schema.json",
+  "title": "PageDSL",
+  "description": "VuePage Studio 页面 DSL 契约（version 1）。前后端共享；AI 生成/修改与导出前均须通过校验。\n\n组件 props 最小集（props 对象允许 additionalProperties，业务侧可 strip 未知字段；下列为各 type 的约定字段）：\n- PageHeader: title (string); actions?: { id, label, type?: primary|default }[]\n- SearchBar: fields: { id, name, label, control: input|select, options?: string[] }[]\n- DataTable: columns: { id, prop, label, width?: number }[]; rowActions?: { id, label }[]; dataSource?: \"mock\"\n- Pagination: pageSize: number; pageSizes?: number[]\n- FormSection: fields: { id, name, label, control: input|select|textarea, required?: boolean, readonly?: boolean }[]; columns?: 1|2\n- ActionBar: actions: { id, label, type?: primary|default|danger }[]\n- StatCards: items: { id, label, value: string, unit?: string }[]\n- TextBlock: content: string; variant?: body|hint\n- Container: layout: stack|two-column；stack 用 node.children；two-column 用 props.left / props.right（Node[]）\n\n约定：仅 type===Container 可有 children（JSON Schema if/then 作文档级约束；严格强制可在 Java DslValidator 中实现）。\n深度上限 3、节点总数上限 50、id 全局唯一等规则由运行时校验器执行。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "pageType", "style", "title", "children"],
+  "properties": {
+    "version": {
+      "const": "1",
+      "description": "DSL 版本；MVP 仅支持 \"1\""
+    },
+    "pageType": {
+      "type": "string",
+      "enum": ["list", "form", "detail", "dashboard"],
+      "description": "页面类型"
+    },
+    "style": {
+      "type": "string",
+      "enum": ["element-plus", "plain"],
+      "description": "导出/预览风格"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "页面标题"
+    },
+    "children": {
+      "type": "array",
+      "description": "根级有序垂直堆叠节点",
+      "items": { "$ref": "#/$defs/node" }
+    },
+    "meta": {
+      "type": "object",
+      "description": "可选元数据",
+      "additionalProperties": false,
+      "properties": {
+        "note": { "type": "string" },
+        "createdAt": { "type": "string" }
+      }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "props"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "全局唯一节点 id；建议格式 {type}_{8chars}，如 PageHeader_a1b2c3d4"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "PageHeader",
+            "Breadcrumb",
+            "AlertBanner",
+            "SearchBar",
+            "DataTable",
+            "Pagination",
+            "FormSection",
+            "DescriptionList",
+            "ActionBar",
+            "StatCards",
+            "Tabs",
+            "Steps",
+            "Timeline",
+            "TagGroup",
+            "TreeNav",
+            "EmptyState",
+            "ResultBlock",
+            "ImageBlock",
+            "Divider",
+            "TextBlock",
+            "Container"
+          ],
+          "description": "白名单组件类型（21 种）"
+        },
+        "props": {
+          "type": "object",
+          "description": "按 type 的 props 对象。允许 additionalProperties（宽松）；各 type 关键字段见根 description。标识符类字段（name/prop）建议匹配 ^[a-zA-Z_][a-zA-Z0-9_]*$。\n\nPageHeader: title, actions?\nSearchBar: fields\nDataTable: columns, rowActions?, dataSource?\nPagination: pageSize, pageSizes?\nFormSection: fields, columns?\nActionBar: actions\nStatCards: items\nTextBlock: content, variant?\nContainer: layout (stack|two-column); two-column 时 left/right 为节点数组",
+          "additionalProperties": true
+        },
+        "children": {
+          "type": "array",
+          "description": "子节点；约定仅 Container（尤其 layout=stack）可使用",
+          "items": { "$ref": "#/$defs/node" }
+        }
+      },
+      "if": {
+        "properties": { "type": { "const": "Container" } },
+        "required": ["type"]
+      },
+      "then": {
+        "description": "Container 可有 children（layout=stack 时使用）；layout=two-column 时列内容在 props.left / props.right"
+      },
+      "else": {
+        "not": { "required": ["children"] },
+        "description": "非 Container 节点不得包含 children 字段"
+      }
+    }
+  }
+}
